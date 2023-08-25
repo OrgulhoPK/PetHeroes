@@ -2,13 +2,14 @@
    e impressão de todas os tiles'''
 import csv,os
 import pygame as pg
+from typing import List
 from pathlib import Path
 
 
 
 #classe feita para gerar o mapa, apartir do arquivo CSV
 
-def load_csv(filename:Path) -> list[int]:
+def load_csv(filename:Path) -> List[int]:
     map =[]
     with open(os.path.join(filename)) as data:
         data = csv.reader(data, delimiter = ',')

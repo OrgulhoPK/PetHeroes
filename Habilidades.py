@@ -2,6 +2,7 @@ import math,random
 import pygame as pg
 from Configs import *
 from Imagens import *
+from typing import List
 from Jogador import Jogador
 from Personagens import Personagem
 
@@ -27,7 +28,7 @@ class Skill:
         self.tempo = 0
 
 #Mob e Duelista e Boss
-    def Basica(self,nome,x:float,y:float,dados:list,velxy:list[float]):#Ataque mob e duelista
+    def Basica(self,nome,x:float,y:float,dados:list,velxy:List[float]):#Ataque mob e duelista
         self.x = x
         self.y = y
         tela = dados[0]
@@ -49,7 +50,7 @@ class Skill:
                 if nome == 'Boss':
                     alvo.slow = True
                 self.contador+=1
-    def EspecialD(self,x:float,y:float,dados:list,velxy:list[float]):#Especial duelista
+    def EspecialD(self,x:float,y:float,dados:list,velxy:List[float]):#Especial duelista
         self.x = x
         self.y = y
         tela = dados[0]
@@ -80,7 +81,7 @@ class Skill:
         
         
 #Clerigo e Shaman     
-    def BasicaRange(self,nome:str,x:float,y:float,velxy:list[float]): #AtaqueRange
+    def BasicaRange(self,nome:str,x:float,y:float,velxy:List[float]): #AtaqueRange
         velx = velxy[0]
         vely = velxy[1]
         x = x+32
@@ -114,7 +115,7 @@ class Skill:
                 if self.contador+1 >=5:
                     self.contador = 0
                 self.contador+=1
-    def EspecialJ(self,mousexy:list[float],dados:list): #Especial Shaman
+    def EspecialJ(self,mousexy:List[float],dados:list): #Especial Shaman
         self.x = mousexy[0]
         self.y = mousexy[1]
         tela = dados[0]
@@ -130,7 +131,7 @@ class Skill:
                 self.contador+=1
 
 #Tanker
-    def BasicaGuaraci(self,x:float,y:float,dados:list,velxy:list[float],mov:int): #Ataque Tanker
+    def BasicaGuaraci(self,x:float,y:float,dados:list,velxy:List[float],mov:int): #Ataque Tanker
         self.x = x
         self.y = y
         tela = dados[0]
@@ -181,7 +182,7 @@ class Skill:
             self.contador +=1
             if self.contador +1 >=16:
                 self.contador = 0                
-    def Slow(self,tela,aliados:list[Jogador],inimigos:list[0]):
+    def Slow(self,tela,aliados:List[Jogador],inimigos:List[list]):
         listTarget = aliados + inimigos
         self.time_efeito+= 1
         if self.time_efeito>180:

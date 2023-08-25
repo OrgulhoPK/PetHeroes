@@ -15,6 +15,14 @@ tela = pg.display.set_mode((S_WIDHT, S_HEIGHT))
 TelaInicial = [pg.Rect(149,357,184,33),
                 pg.Rect(508,441,263,37)]
 
+
+#Blocos centrais, para orientação dos campos de ataque.
+
+Slots = [pg.Rect(112,448,31,45),pg.Rect(176,448,31,45),pg.Rect(240,448,31,45),pg.Rect(304,448,31,45),
+        pg.Rect(368,448,31,45),pg.Rect(112,512,31,45),pg.Rect(176,512,31,45),pg.Rect(240,512,31,45),
+        pg.Rect(304,512,31,45),pg.Rect(368,512,31,45),pg.Rect(112,576,31,45),pg.Rect(176,576,31,45),
+        pg.Rect(240,576,31,45),pg.Rect(304,576,31,45),pg.Rect(368,576,31,45)]
+
 #Lista de habilidades Aliadas
 SkillsIda = [Skill(5,Imagem.hitDamage),Skill(5,Imagem.hitDamage)]
 SkillsHeitor = [Skill(20,Imagem.tornado),Skill(92,Imagem.C_Stun1)]

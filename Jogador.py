@@ -11,6 +11,7 @@ class Jogador:
         self.speed = personagem.speed
         #Dados dos inimigos
         self.dados = []   
+
         #Atributos e skills de personagens
         #separei para ter uma visao melhor dos atributos
         self.nome = personagem.nome
@@ -20,8 +21,9 @@ class Jogador:
         self.sprites = personagem.sprites
         self.HBasica = personagem.habilidade[0]
         self.HEspecial = personagem.habilidade[1]
-        self.timeSkills = personagem.timeSkills
+
         self.projeteis = []  #list projeteis
+        self.teste = False
 
         #estado e  condições
         self.mousexy = None  #posicao do mouse para habilidade
@@ -44,17 +46,6 @@ class Jogador:
         self.countatk = 0
         self.countspec =  0
 
-    def esquerda(self):
-        self.x -= self.speed
-    def direita(self):
-        self.x += self.speed
-    def cima(self):
-        self.y -= self.speed
-    def baixo(self):
-        self.y  += self.speed
-    def parar(self):
-        self.mov_vy = 0
-        self.mov_vx = 0
 
     #Funcao de dano sofrido
     def hit(self,dano:int):
@@ -72,69 +63,32 @@ class Jogador:
         if not self.atk and not self.atkEspecial:
             if self.mov_vx == 0 and self.mov_vy == 0:
                 tela.blit(pg.transform.scale(baixo[0], (64,64)),(posx,posy))
-            if self.mov_vx == 1 or (self.mov_vx ==1 and 
-                (self.mov_vy == 1 or self.mov_vy == -1)):                
-                tela.blit(pg.transform.scale(esq_Dir[self.anim_mov//4], (64,64)),(posx,posy))
-            elif self.mov_vx == -1 or (self.mov_vx == -1 and
-                (self.mov_vy == 1 or self.mov_vy == -1)):   
-                tela.blit(pg.transform.scale(pg.transform.flip(esq_Dir[self.anim_mov//4],True,False), (64,64)),(posx,posy))
-            elif self.mov_vy == -1:
-                tela.blit(pg.transform.scale(cima[self.anim_mov//4], (64,64)),(posx,posy))  
-            elif self.mov_vy == 1:
-                tela.blit(pg.transform.scale(baixo[self.anim_mov//4], (64,64)),(posx,posy))
-            if self.anim_mov+1 >= 28:
-                self.anim_mov = 0
-            self.anim_mov +=1
-            self.parar()
-
-        if self.stun:
-            tela.blit(Imagem.starStun1[self.timestun//5],(self.x+5,self.y-10))
         #atualizar posicao do hitbox e barra de vida
         self.hitbox = pg.Rect(self.x-8,self.y-31,31,45)
-        pg.draw.rect(tela,(50,255,120),(self.hitbox),2)
+        if self.teste:
+            pg.draw.rect(tela,(50,255,120),(self.hitbox),2)
+        
         #projeteis
-        for projeteis in self.projeteis:      
+        if self.nome == 'Heitor' or self.nome == 'Jurupari': 
+            if self.mov_vx == -1:
+                tela.blit(pg.transform.flip(ataque[self.countatk//2],True,False),(posx,posy))
+            else:
+                tela.blit(ataque[self.countatk//2],(posx,posy))  
+                                                
+            if self.countatk +1 >= 16:
+                self.countatk = 0
+                self.atk = False
+                projetil = self.HBasica.BasicaRange(self.nome,posx,posy,(self.mov_vx,self.mov_vy))
+                self.projeteis.append(projetil) 
+                self.cooldown1 = 0
+            self.countatk +=1
+
+
+        for projeteis in self.projeteis:        
             projeteis.desenha(tela) 
 
 #Desenha e chama as habilidades de ataque
 def desenhar_Ataques(self,tela,ataque:list):
-    #Duelista
-    if self.nome == 'Ida':            
-            if self.mov_vx == -1:
-                if self.countatk > 13:
-                    self.HBasica.Basica(self.nome,self.x,self.y,self.dados,(self.mov_vx,self.mov_vy))
-                tela.blit(pg.transform.flip(ataque[self.countatk//2],True,False),(self.x-64,self.y-64))
-            else:
-                if self.countatk > 13:
-                    self.HBasica.Basica(self.nome,self.x,self.y,self.dados,(self.mov_vx,self.mov_vy))
-                tela.blit(ataque[self.countatk//2],(self.x-64,self.y-64))
-            
-            if self.countatk +1 >= 16:
-                self.countatk = 0
-                self.atk = False
-                self.cooldown1 = 0
-            self.countatk +=1
-    #Tanker
-    if self.nome == 'Guaraci':            
-        if self.mov_vx == -1:
-            if self.countatk >10: 
-                self.x -= self.speed*2
-            if self.countatk == 15:
-                    self.HBasica.BasicaGuaraci(self.x,self.y,self.dados,(self.mov_vx,self.mov_vy),self.speed)
-            tela.blit(pg.transform.flip(ataque[self.countatk//2],True,False),(self.x,self.y))
-        else:
-            if self.countatk >10: 
-                self.x += self.speed*2
-            if self.countatk == 15:
-                self.HBasica.BasicaGuaraci(self.x,self.y,self.dados,(self.mov_vx,self.mov_vy),self.speed)
-            tela.blit(ataque[self.countatk//2],(self.x,self.y))
-        
-        if self.countatk +1 >= 16:
-            self.countatk = 0
-            self.cooldown1 = 0
-            self.atk = False
-            
-        self.countatk +=1
 
     #Clerigo e Shaman
     if self.nome == 'Heitor' or self.nome == 'Jurupari': 
